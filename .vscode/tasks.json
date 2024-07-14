@@ -1,0 +1,42 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Create VSCode Workspace File for Windows on Desktop",
+            "type": "process",
+            "command": "powershell.exe",
+            "args": [
+                "-NoLogo",
+                "-NonInteractive",
+                "-NoProfile",
+                "-ExecutionPolicy", "Bypass",
+                "-Command",
+                "& {",
+                "$ErrorActionPreference = 'SilentlyContinue';",
+                "$desktopPath = [Environment]::GetFolderPath('Desktop');",
+                "$projectName = Split-Path -Path '${workspaceFolder}' -Leaf;",
+                "$workspacePath = Join-Path $desktopPath \"$projectName.code-workspace\";",
+                "if (-not (Test-Path $workspacePath)) {",
+                "    $workspaceContent = @{ folders = @( @{ path = '${workspaceFolder}' } ) } | ConvertTo-Json;",
+                "    Set-Content -Path $workspacePath -Value $workspaceContent | Out-Null;",
+                "    Write-Host \"Workspace file created on desktop: $workspacePath\";",
+                "} else {",
+                "    Write-Host \"Workspace file already exists on desktop: $workspacePath\";",
+                "}",
+                "}"
+            ],
+            "problemMatcher": [],
+            "presentation": {
+                "echo": false,
+                "reveal": "always",
+                "focus": false,
+                "panel": "dedicated",
+                "showReuseMessage": false,
+                "clear": true
+            },
+            "runOptions": {
+                "runOn": "folderOpen"
+            }
+        }
+    ]
+}
